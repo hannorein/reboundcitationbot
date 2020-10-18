@@ -31,16 +31,17 @@ debug = False # "2020arXiv201006614G"
 for p in response["docs"]:
     bibcode = p["bibcode"]
     if bibcode not in oldc or bibcode == debug:
-        debug = False
-        pub = p["pub"]
-        title = p["title"][0]
-        maxlength = 280 - 25
-        text = "A new paper has cited REBOUND:\n"+title
-        if len(text)>maxlength:
-            text = text[:maxlength-2] + '..' 
-        url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
-        text += " "+ url
-        api.update_status(text)
+        if not firstrun:
+            debug = False
+            pub = p["pub"]
+            title = p["title"][0]
+            maxlength = 280 - 25
+            text = "A new paper has cited REBOUND:\n"+title
+            if len(text)>maxlength:
+                text = text[:maxlength-2] + '..' 
+            url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
+            text += " "+ url
+            api.update_status(text)
     if bibcode not in oldc:
         with open(oldcf,"a") as f:
             print(bibcode,file=f)
