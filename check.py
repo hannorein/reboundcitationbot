@@ -44,6 +44,7 @@ for p in response["docs"]:
                 authortxt += " et al."
             maxlength = 280 - 25
             text = "A new paper by "+authortxt+" has cited REBOUND:\n"+title
+            text = text.replace("&amp;","&")
             if len(text)>maxlength:
                 text = text[:maxlength-2] + '..' 
             url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
