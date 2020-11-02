@@ -50,9 +50,10 @@ for p in response["docs"]:
             url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
             text += " "+ url
             api.update_status(text)
-    if bibcode not in oldc:
-        with open(oldcf,"a") as f:
-            print(bibcode,file=f)
+            if bibcode not in oldc:
+                with open(oldcf,"a") as f:
+                    print(bibcode,file=f)
+                break
 
 
 
