@@ -1,6 +1,7 @@
 import requests
 import os.path
 import tweepy
+from mastodon import Mastodon
 
 with open("twitterkeys.txt") as f:
     lines = f.readlines()
