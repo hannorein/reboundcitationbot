@@ -6,6 +6,17 @@ from mastodon import Mastodon
 with open("twitterkeys.txt") as f:
     lines = f.readlines()
     CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET = [l.strip() for l in lines]
+
+with open("mastodonkeys.txt") as f:
+    lines = f.readlines()
+    MASTODON_ACCESS_TOKEN, = [l.strip() for l in lines]
+
+mastodon = Mastodon(
+        access_token = MASTODON_ACCESS_TOKEN,
+        api_base_url = "https://botsin.space/",
+        )
+
+
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
@@ -51,6 +62,7 @@ for p in response["docs"]:
             url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
             text += " "+ url
             api.update_status(text)
+            mastodon.status_post(text)
             if bibcode not in oldc:
                 with open(oldcf,"a") as f:
                     print(bibcode,file=f)
