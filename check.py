@@ -61,7 +61,11 @@ for p in response["docs"]:
                 text = text[:maxlength-2] + '..' 
             url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
             text += " "+ url
-            api.update_status(text)
+            text += " #nbody #astrodon"
+            try:
+                api.update_status(text)
+            except:
+                print("Twitter error!")
             mastodon.status_post(text)
             if bibcode not in oldc:
                 with open(oldcf,"a") as f:
