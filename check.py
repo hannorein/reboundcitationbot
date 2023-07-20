@@ -24,7 +24,7 @@ api = tweepy.API(auth)
 with open("adskey.txt") as f:
     token = f.read().strip()
 headers = {"Authorization": "Bearer "+token}
-bibcodestocheck = ["2015MNRAS.446.1424R", "2012A&A...537A.128R", "2015MNRAS.452..376R", "2018MNRAS.473.3351R", "2019MNRAS.485.5490R", "2011MNRAS.415.3168R", "2011ascl.soft10016R", "2020MNRAS.491.2885T"]
+bibcodestocheck = ["2015MNRAS.446.1424R", "2012A&A...537A.128R", "2015MNRAS.452..376R", "2018MNRAS.473.3351R", "2019MNRAS.485.5490R", "2011MNRAS.415.3168R", "2011ascl.soft10016R", "2019MNRAS.489.4632R", "2020MNRAS.491.2885T", "2023arXiv230705683J"]
 q = "citations(bibcode:"+(") or citations(bibcode:".join(bibcodestocheck))+")"
 params = {"q":q, "rows":"2000","fl":"bibcode,pub,title,author"}
 url = "https://api.adsabs.harvard.edu/v1/search/bigquery"
