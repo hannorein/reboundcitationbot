@@ -1,6 +1,5 @@
 import requests
 import os.path
-import tweepy
 from mastodon import Mastodon
 
 with open("twitterkeys.txt") as f:
@@ -17,9 +16,6 @@ mastodon = Mastodon(
         )
 
 
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-api = tweepy.API(auth)
 
 with open("adskey.txt") as f:
     token = f.read().strip()
@@ -62,10 +58,6 @@ for p in response["docs"]:
             url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
             text += " "+ url
             text += " #nbody #astrodon"
-            try:
-                api.update_status(text)
-            except:
-                print("Twitter error!")
             mastodon.status_post(text)
             if bibcode not in oldc:
                 with open(oldcf,"a") as f:
