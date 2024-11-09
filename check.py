@@ -2,17 +2,13 @@ import requests
 import os.path
 from mastodon import Mastodon
 
-with open("twitterkeys.txt") as f:
-    lines = f.readlines()
-    CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET = [l.strip() for l in lines]
-
 with open("mastodonkeys.txt") as f:
     lines = f.readlines()
     MASTODON_ACCESS_TOKEN, = [l.strip() for l in lines]
 
 mastodon = Mastodon(
         access_token = MASTODON_ACCESS_TOKEN,
-        api_base_url = "https://botsin.space/",
+        api_base_url = "https://mastodon.social/",
         )
 
 
