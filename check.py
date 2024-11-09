@@ -1,20 +1,22 @@
+# REBOUND Citation Bot
+# Hanno Rein 2024
 import requests
 import os.path
 from mastodon import Mastodon
+from atproto import Client, client_utils
 
+# Read secrets
 with open("mastodonkeys.txt") as f:
     lines = f.readlines()
     MASTODON_ACCESS_TOKEN, = [l.strip() for l in lines]
 
-mastodon = Mastodon(
-        access_token = MASTODON_ACCESS_TOKEN,
-        api_base_url = "https://mastodon.social/",
-        )
-
-
+with open("bluesky.txt") as f:
+    blueskykey = f.read().strip()
 
 with open("adskey.txt") as f:
     token = f.read().strip()
+
+# Query ADS
 headers = {"Authorization": "Bearer "+token}
 bibcodestocheck = ["2015MNRAS.446.1424R", "2012A&A...537A.128R", "2015MNRAS.452..376R", "2018MNRAS.473.3351R", "2019MNRAS.485.5490R", "2011MNRAS.415.3168R", "2011ascl.soft10016R", "2019MNRAS.489.4632R", "2020MNRAS.491.2885T", "2023arXiv230705683J"]
 q = "citations(bibcode:"+(") or citations(bibcode:".join(bibcodestocheck))+")"
@@ -34,7 +36,7 @@ oldc = [l.strip() for l in oldc]
 
 debug = False # "2020arXiv201006614G"
 
-newpost = False
+
 
 for p in response["docs"]:
     bibcode = p["bibcode"]
@@ -54,21 +56,28 @@ for p in response["docs"]:
             if len(text)>maxlength:
                 text = text[:maxlength-2] + '..' 
             url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
-            text += " "+ url
-            text += " #nbody #astrodon"
-            newpost = True
-            mastodon.status_post(text)
+            
+            try:
+                mastodon = Mastodon(
+                        access_token = MASTODON_ACCESS_TOKEN,
+                        api_base_url = "https://mastodon.social/",
+                        )
+                mastodon.status_post(text+" "+url+ " #nbody #astrodon")
+            except:
+                print("Error posting to mastodon.")
+
+            try:
+                client = Client()
+                client.login('reboundbot.bsky.social', blueskykey)
+                text_builder = client_utils.TextBuilder()
+                text_builder.text(text+"\n\nFind paper on ")
+                text_builder.link("NASA ADS", url)
+                client.send_post(text_builder)
+            except:
+                print("Error posting to bluesky.")
+
             if bibcode not in oldc:
                 with open(oldcf,"a") as f:
                     print(bibcode,file=f)
                 break
-
-# Do bluesky at end, in case something goes wrong.
-if newpost:
-    from atproto import Client
-    client = Client()
-    with open("bluesky.txt") as f:
-        blueskykey = f.read().strip()
-    client.login('reboundbot.bsky.social', blueskykey)
-    client.send_post(text=text)
 
