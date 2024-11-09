@@ -34,6 +34,8 @@ oldc = [l.strip() for l in oldc]
 
 debug = False # "2020arXiv201006614G"
 
+newpost = False
+
 for p in response["docs"]:
     bibcode = p["bibcode"]
     if bibcode not in oldc or bibcode == debug:
@@ -54,11 +56,19 @@ for p in response["docs"]:
             url = "https://ui.adsabs.harvard.edu/abs/"+bibcode+"/abstract"
             text += " "+ url
             text += " #nbody #astrodon"
+            newpost = True
             mastodon.status_post(text)
             if bibcode not in oldc:
                 with open(oldcf,"a") as f:
                     print(bibcode,file=f)
                 break
 
-
+# Do bluesky at end, in case something goes wrong.
+if newpost:
+    from atproto import Client
+    client = Client()
+    with open("bluesky.txt") as f:
+        blueskykey = f.read().strip()
+    client.login('reboundbot.bsky.social', blueskykey)
+    client.send_post(text=text)
 
