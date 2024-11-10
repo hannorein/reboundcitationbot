@@ -4,6 +4,7 @@ import requests
 import os.path
 from mastodon import Mastodon
 from atproto import Client, client_utils
+from bs4 import BeautifulSoup
 
 # Read secrets
 with open("mastodonkeys.txt") as f:
@@ -44,6 +45,8 @@ for p in response["docs"]:
         if not firstrun:
             pub = p["pub"]
             title = p["title"][0]
+            soup = BeautifulSoup(title,features="html.parser")
+            title = soup.get_text()
             authors = p["author"]
             authortxt = authors[0].split(",")[0]
             if len(authors)==2:
@@ -70,7 +73,7 @@ for p in response["docs"]:
                 client = Client()
                 client.login('reboundbot.bsky.social', blueskykey)
                 text_builder = client_utils.TextBuilder()
-                text_builder.text(text+"\n\nFind paper on ")
+                text_builder.text(text+"\n\nFind the paper on ")
                 text_builder.link("NASA ADS", url)
                 client.send_post(text_builder)
             except:
