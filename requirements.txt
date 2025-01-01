@@ -19,7 +19,6 @@ importlib-metadata==6.7.0
 libipld==1.2.3
 Mastodon.py==1.5.1
 oauthlib==3.1.0
-pkg_resources==0.0.0
 pycparser==2.21
 pydantic==2.5.3
 pydantic_core==2.14.6
