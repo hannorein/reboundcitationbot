@@ -1,10 +1,12 @@
 annotated-types==0.5.0
 anyio==3.7.1
 atproto==0.0.46
+beautifulsoup4==4.12.3
 blurhash==1.1.4
 certifi==2020.6.20
 cffi==1.15.1
 chardet==3.0.4
+charset-normalizer==3.4.1
 click==8.1.7
 cryptography==42.0.8
 decorator==5.1.1
@@ -31,6 +33,7 @@ requests-oauthlib==1.3.0
 sgmllib3k==1.0.0
 six==1.15.0
 sniffio==1.3.1
+soupsieve==2.6
 typing_extensions==4.7.1
 urllib3==1.25.10
 websockets==11.0.3
